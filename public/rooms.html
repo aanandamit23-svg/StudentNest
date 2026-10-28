@@ -1,11 +1,35 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Rooms - StudentNest</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StudentNest - Rooms</title>
+  <style>
+    body{font-family:Arial;background:#f4f7fb;margin:0;color:#222}
+    header{background:#2447a8;color:white;padding:20px;text-align:center}
+    main{max-width:800px;margin:25px auto;padding:15px}
+    .card{background:white;padding:18px;margin:12px 0;border-radius:12px;box-shadow:0 2px 8px #ddd}
+    a,button{background:#2447a8;color:white;padding:10px 15px;border:0;border-radius:6px;text-decoration:none;cursor:pointer}
+  </style>
 </head>
 <body>
-  <h1>StudentNest - Rooms</h1>
-  <p>Find rooms for students.</p>
-  <a href="/">Home</a>
+<header><h1>StudentNest</h1><p>Rooms for Students</p></header>
+<main>
+  <a href="index.html">Home</a>
+  <h2>Available Rooms</h2>
+  <div id="list">Loading rooms...</div>
+</main>
+<script>
+fetch("/api/listings")
+  .then(r=>r.json())
+  .then(items=>{
+    const rooms=items.filter(x=>x.category==="Room");
+    document.getElementById("list").innerHTML=rooms.length
+      ? rooms.map(x=>`<div class="card"><h3>${x.name}</h3><p>Rent: ₹${x.price}/month</p></div>`).join("")
+      : "No rooms available.";
+  })
+  .catch(()=>document.getElementById("list").textContent="Could not load rooms.");
+</script>
 </body>
 </html>
