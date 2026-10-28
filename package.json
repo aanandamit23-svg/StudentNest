@@ -1,0 +1,14 @@
+{
+  "name": "studentnest",
+  "version": "1.0.0",
+  "description": "StudentNest college project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.2.0",
+    "express": "^5.1.0"
+  }
+}
