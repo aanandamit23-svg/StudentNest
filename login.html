@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudentNest Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0efff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 300px;
+      box-shadow: 0 5px 20px #0002;
+    }
+    h2 { text-align: center; color: #493bc0; }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+    }
+    input { border: 1px solid #ccc; }
+    button {
+      background: #493bc0;
+      color: white;
+      border: 0;
+      cursor: pointer;
+    }
+    a { color: #493bc0; }
+    .home { text-align: center; margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🎓 StudentNest</h2>
+    <h3>Login / Signup</h3>
+<select id="action">
+  <option value="signup">Create Account</option>
+  <option value="login">Login</option>
+</select>
+    <form id="loginForm">
+      <input id="name" placeholder="Your name" required>
+      <input id="email" type="email" placeholder="Email address" required>
+      <input id="password" type="password" placeholder="Password (min 6 characters)" minlength="6" required>
+      <button type="submit">Continue</button>
+    </form>
+    <p id="message"></p>
+    <div class="home"><a href="/">Back to Home</a></div>
+  </div>
+  
+<script>
+  document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const message = document.getElementById("message");
+    message.textContent = "Please wait...";
+
+    const data = {
+      name: document.getElementById("name").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      password: document.getElementById("password").value
+    };
+
+    try {
+      const response = await fetch("/api/" + document.getElementById("action").value, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      message.textContent = result.message;
+
+      if (response.ok) {
+        document.getElementById("loginForm").reset();
+      }
+    } catch (error) {
+      message.textContent = "Server se connection nahi ho raha. Server check karo.";
+    }
+  });
+</script>
+
+</body>
+</html>

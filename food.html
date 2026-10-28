@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Food Services | StudentNest</title>
+<style>
+body{margin:0;font-family:Arial;background:#f5f7fc;color:#202744}
+header{background:#4036a8;color:white;padding:22px 7%}
+nav a{color:white;margin-right:18px;text-decoration:none}
+main{padding:30px 7%}
+.card{background:white;padding:20px;margin:14px 0;border-radius:12px;box-shadow:0 3px 12px #0001}
+</style>
+</head>
+<body>
+<header>
+<h2>🍱 StudentNest</h2>
+<nav>
+<a href="/">Home</a>
+<a href="/rooms.html">Rooms</a>
+<a href="/food.html">Food</a>
+<a href="/jobs.html">Jobs</a>
+</nav>
+</header>
+<main>
+<h1>🍲 Food Services</h1>
+<p>Find affordable food and tiffin services for students.</p>
+<div id="listings">Loading food services...</div>
+</main>
+<script>
+fetch("http://localhost:3000/api/listings")
+.then(function(response){return response.json();})
+.then(function(data){
+const items=data.filter(function(x){return x.category==="Food";});
+const box=document.getElementById("listings");
+if(items.length===0){box.textContent="No food services available yet.";return;}
+box.innerHTML="";
+items.forEach(function(x){
+const card=document.createElement("div");
+card.className="card";
+const title=document.createElement("h3");
+title.textContent=x.name;
+const price=document.createElement("p");
+price.textContent="Monthly price: ₹"+x.price;
+const id=document.createElement("p");
+id.textContent="Listing ID: "+x.id;
+card.append(title,price,id);
+box.appendChild(card);
+});
+})
+.catch(function(){
+document.getElementById("listings").textContent="Could not load food services.";
+});
+</script>
+</body>
+</html>

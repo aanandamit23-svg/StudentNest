@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rooms & PG | StudentNest</title>
+<style>
+body{margin:0;font-family:Arial;background:#f5f7fc;color:#202744}
+header{background:#4036a8;color:white;padding:22px 7%}
+nav a{color:white;margin-right:18px;text-decoration:none}
+main{padding:30px 7%}
+.card{background:white;padding:20px;margin:14px 0;border-radius:12px;box-shadow:0 3px 12px #0001}
+a{color:#493bc0}
+</style>
+</head>
+<body>
+<header>
+<h2>🏡 StudentNest</h2>
+<nav>
+<a href="/">Home</a>
+<a href="/rooms.html">Rooms</a>
+<a href="/food.html">Food</a>
+<a href="/jobs.html">Jobs</a>
+</nav>
+</header>
+<main>
+<h1>🏠 Rooms & PG</h1>
+<p>Find affordable rooms and PGs for students.</p>
+<div id="listings">Loading rooms...</div>
+</main>
+<script>
+fetch("http://localhost:3000/api/listings")
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(data) {
+    const rooms = data.filter(function(item) {
+      return item.category === "Room";
+    });
+
+    const box = document.getElementById("listings");
+
+    if (rooms.length === 0) {
+      box.textContent = "No rooms available yet.";
+      return;
+    }
+
+    box.innerHTML = "";
+
+    rooms.forEach(function(item) {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = "<h3></h3><p></p><p></p>";
+      card.children[0].textContent = item.name;
+      card.children[1].textContent = "Monthly price: ₹" + item.price;
+      card.children[2].textContent = "Listing ID: " + item.id;
+      box.appendChild(card);
+    });
+  })
+  .catch(function() {
+    document.getElementById("listings").textContent =
+      "Could not load rooms. Please restart StudentNest.";
+  });
+</script>
+</body>
+</html>

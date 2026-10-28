@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Jobs | StudentNest</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fc;
+  color: #202744;
+}
+
+header {
+  background: linear-gradient(120deg, #30258f, #6658df);
+  color: white;
+  padding: 22px 7%;
+}
+
+header h2 {
+  margin-top: 0;
+}
+
+nav a {
+  color: white;
+  margin-right: 18px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  padding: 30px 7%;
+}
+
+h1 {
+  color: #30258f;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  margin: 16px 0;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px #30258f12;
+}
+
+.card h3 {
+  color: #30258f;
+}
+
+.price {
+  font-weight: bold;
+  color: #16834a;
+}
+
+footer {
+  text-align: center;
+  padding: 22px;
+  background: #ecebff;
+  margin-top: 30px;
+}
+
+button {
+  background: #493bc0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  header, main {
+    padding: 22px 5%;
+  }
+
+  nav a {
+    display: inline-block;
+    margin: 5px 10px 5px 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>💼 StudentNest</h2>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/rooms.html">Rooms</a>
+    <a href="/food.html">Food</a>
+    <a href="/jobs.html">Jobs</a>
+  </nav>
+</header>
+
+<main>
+  <h1>💼 Student Jobs</h1>
+  <p>Explore affordable and suitable job opportunities for students.</p>
+
+  <div id="listings">Loading jobs...</div>
+</main>
+
+<footer>
+  © 2026 StudentNest | Made for Students
+</footer>
+
+<script>
+fetch("http://localhost:3000/api/listings")
+  .then(function(response) {
+    if (!response.ok) {
+      throw new Error("Could not fetch listings");
+    }
+    return response.json();
+  })
+  .then(function(data) {
+    const jobs = data.filter(function(item) {
+      return item.category === "Job";
+    });
+
+    const box = document.getElementById("listings");
+    box.innerHTML = "";
+
+    if (jobs.length === 0) {
+      box.textContent = "No jobs available yet.";
+      return;
+    }
+
+    jobs.forEach(function(item) {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const title = document.createElement("h3");
+      title.textContent = item.name;
+
+      const price = document.createElement("p");
+      price.className = "price";
+      price.textContent = "Monthly pay: ₹" + item.price;
+
+      const listingId = document.createElement("p");
+      listingId.textContent = "Listing ID: " + item.id;
+
+      card.appendChild(title);
+      card.appendChild(price);
+      card.appendChild(listingId);
+
+      box.appendChild(card);
+    });
+  })
+  .catch(function(error) {
+    document.getElementById("listings").textContent =
+      "Could not load jobs. Please check that StudentNest is running.";
+    console.error(error);
+  });
+</script>
+
+</body>
+</html>
