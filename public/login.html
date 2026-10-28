@@ -1,9 +1,73 @@
+
 <!DOCTYPE html>
-<html>
-<head><title>Login - StudentNest</title></head>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudentNest Login</title>
+<style>
+body{font-family:Arial;background:#eef3fa;margin:0;padding:30px}
+.box{max-width:360px;margin:25px auto;background:white;padding:25px;border-radius:12px}
+h2{text-align:center;color:#17365d}
+input,button{width:100%;padding:12px;margin:8px 0;box-sizing:border-box}
+button{background:#1769aa;color:white;border:0;border-radius:5px;cursor:pointer}
+#msg{text-align:center}
+a{display:block;text-align:center;margin-top:15px}
+</style>
+</head>
 <body>
-<h1>StudentNest - Login</h1>
-<p>Login page</p>
-<a href="/">Home</a>
+<div class="box">
+<h2>StudentNest</h2>
+
+<h3>Create Account</h3>
+<input id="name" placeholder="Your name">
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="signup()">Sign Up</button>
+
+<hr>
+
+<h3>Login</h3>
+<input id="loginEmail" type="email" placeholder="Email">
+<input id="loginPassword" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+
+<p id="msg"></p>
+<a href="/">Back to Home</a>
+</div>
+
+<script>
+async function send(url, data) {
+  const msg = document.getElementById("msg");
+  msg.textContent = "Please wait...";
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    msg.textContent = result.message || result.error ||
+      (res.ok ? "Successful!" : "Something went wrong");
+  } catch {
+    msg.textContent = "Server error. Please try again.";
+  }
+}
+
+function signup() {
+  send("/api/signup", {
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    password: document.getElementById("password").value
+  });
+}
+
+function login() {
+  send("/api/login", {
+    email: document.getElementById("loginEmail").value.trim(),
+    password: document.getElementById("loginPassword").value
+  });
+}
+</script>
 </body>
 </html>
