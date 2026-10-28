@@ -1,4 +1,3 @@
-
 const express = require("express");
 const Database = require("better-sqlite3");
 
@@ -195,10 +194,12 @@ app.post("/api/login", (req, res) => {
     message: "Login successful! Welcome, " + user.name
   });
 });
-app.listen(3000, () => {
-  console.log("StudentNest running at http://localhost:3000");
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
 });
 
+const PORT = process.env.PORT || 3000;
 
-
-
+app.listen(PORT, () => {
+  console.log("StudentNest running on port " + PORT);
+});
